@@ -1,3 +1,11 @@
-Requires python3
+To run/test just the scanner, do:
 
-python3 scanner.py file_name
+python3 ./src/scanner/scanner.py file_name
+
+NOTE: file_name is relative to your current working directory, and the above
+snippet assumes that you are currently in the csci489 folder.
+
+NOTE 2: Grammar and vocabulary can be found in src/scanner/grammar.py, this is useful
+to figure out what the output of a program means.
+
+NOTE 3: Some test program files have been provided at the top level directory

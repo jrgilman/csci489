@@ -1,0 +1,22 @@
+declare integer x, y, z;
+
+declare integer w;
+declare integer hello1;
+
+to 4 loop
+    read y;
+    x := 2*y;
+    z := 3*y;
+    write x, z
+endloop;
+
+if  y > 10 then
+    write y
+else
+    write 10
+fi;
+
+write x, z
+
+
+##

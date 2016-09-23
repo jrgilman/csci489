@@ -1,5 +1,7 @@
 class Grammar:
 
+# global token/minilang grammar file
+
     keyword_tokens = {
         'read': ('KWRD', 3),
         'write': ('KWWR', 4),
@@ -34,7 +36,6 @@ class Grammar:
             '<=': ('LER', 22)
         },
         '#': {
-            '#': ('ERROR_TEST', 666),
             '##': ('NER', 24)
         },
         '(': ('LPAR', 25),

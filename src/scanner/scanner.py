@@ -6,7 +6,11 @@ class Scanner:
 
     def __init__(self, file_to_scan):
         self.program_string = ''
-        self.identifier_list = {}
+        self.identifier_dict = {}
+
+        # we start at 100 at the moment, because no keyword/vocab starts even close
+        # to this number. In the future though I'd like to completely change the tokens
+        # for identifiers so that they cannot be mixed up no matter what.
         self.current_identifier = 100
         self.scanned_program = ''
 
@@ -18,8 +22,9 @@ class Scanner:
 
         self.handleToString()
         self.scanString()
-        print(self.scanned_program)
 
+    # loads the handle (file) into a string with no spacing or newline characters
+    # so that parsing can begin
     def handleToString(self):
 
         temp_program_string = ''
@@ -28,6 +33,8 @@ class Scanner:
 
         self.program_string = temp_program_string
 
+    # scans the string created via handleToString into a program using the grammar
+    # and vocabulary described in grammar.py
     def scanString(self):
         i = 0
         while( i < len(self.program_string) ):
@@ -59,32 +66,34 @@ class Scanner:
                     digit_test = char in string.digits
 
                 if( identifier is True ):
-                    if( temp not in self.identifier_list ):
-                        self.identifier_list[temp] = self.current_identifier
+                    if( temp not in self.identifier_dict ):
+                        self.identifier_dict[temp] = self.current_identifier
                         self.current_identifier += 1
                     else:
                         self.scanned_program += str(Grammar.special_tokens['identifier'][1]) + ' '
 
-                    self.scanned_program += str(self.identifier_list[temp]) + ' '
+                    self.scanned_program += str(self.identifier_dict[temp]) + ' '
 
             elif( char in Grammar.tokens ):
                 temp = char
                 token = Grammar.tokens[char]
 
-                while( type(token) is dict ):
+                i += 1
+
+                if type(token) is dict:
                     try:
-                        i += 1
                         char = self.program_string[i]
                         temp += char
                     except IndexError:
-                        pass
+                        print('Unexpected token at end of file %s' % temp[1:])
+                        sys.exit()
 
                     if( temp in token ):
                         token = token[temp]
+                        i += 1
                     else:
-                        temp = temp[:1]
-
-                i += 1
+                        print('Improperly formatted token %s' % temp)
+                        sys.exit()
 
                 self.scanned_program += str(token[1])
                 if( token[0] != 'NER' ):
@@ -107,9 +116,12 @@ class Scanner:
             else:
                 raise Exception('Unrecognizable character \'%s\'' % char)
 
+# used for unit testing of the scanner class itself
 if __name__ == "__main__":
     try:
-        Scanner(sys.argv[1])
+        scanner = Scanner(sys.argv[1])
+        print(scanner.scanned_program)
+        print(sorted(scanner.identifier_dict.items()))
     except IndexError as ie_e:
         raise ie_e
         print('ERROR: You must provide a file to scan as an argument to this python program.')
