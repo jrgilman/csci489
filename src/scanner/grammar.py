@@ -11,6 +11,7 @@ class Grammar:
         'fi': ('KWFI', 8),
         'to': ('KWTO', 9),
         'do': ('KWDO', 10),
+        'loop': ('KWSTRL', 29),
         'endloop': ('KWENDL', 11),
         'declare': ('KWDEC', 27),
         'integer': ('KWINT', 28)

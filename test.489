@@ -10,7 +10,7 @@ to 4 loop
     write x, z
 endloop;
 
-if  y > 10 then
+if y > 10 then
     write y
 else
     write 10

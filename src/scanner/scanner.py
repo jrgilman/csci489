@@ -92,8 +92,11 @@ class Scanner:
                         token = token[temp]
                         i += 1
                     else:
-                        print('Improperly formatted token %s' % temp)
-                        sys.exit()
+                        if(temp[:1] in token):
+                            token = token[temp[:1]]
+                        else:
+                            print('Improperly formatted token %s' % temp)
+                            sys.exit()
 
                 self.scanned_program += str(token[1])
                 if( token[0] != 'NER' ):
