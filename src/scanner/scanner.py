@@ -20,17 +20,8 @@ class Scanner:
             print('ERROR: File \'%s\' could not be accessed.' % file_to_scan)
             sys.exit()
 
+        self.line_counter = 0
         self.scanProgram()
-
-    # loads the handle (file) into a string with no spacing or newline characters
-    # so that parsing can begin
-    # def handleToString(self):
-    #
-    #    temp_program_string = ''
-    #    for line in self.handle:
-    #        temp_program_string += line.replace('\n', '').replace(' ', '')
-    #
-    #    self.program_string = temp_program_string
 
     # scans the string created via handleToString into a program using the grammar
     # and vocabulary described in grammar.py
@@ -40,105 +31,135 @@ class Scanner:
 
             i = 0
             line = full_line[:-1] # strips off new line.
+            self.line_counter += 1 # only used to help the user diagnose errors.
 
             while( i < len(line) ):
-                char = line[i]
 
+                char = line[i]
+                # these tests are used later to determine what type of word we
+                # are currently scanning.
                 lower_test = char in string.ascii_lowercase
                 upper_test = char in string.ascii_uppercase
                 digit_test = char in string.digits
                 white_space_test = (char is ' ')
 
                 if( lower_test or upper_test ):
-                    # this section tests for either a keyword, or a identifier.
-
-                    temp = ''
-
-                    while( lower_test or upper_test or digit_test ):
-                        temp += char
-
-                        i += 1
-
-                        try:
-                            char = line[i]
-                        except IndexError as ie:
-                            break
-
-                        lower_test = char in string.ascii_lowercase
-                        upper_test = char in string.ascii_uppercase
-                        digit_test = char in string.digits
-
-                    if temp in Grammar.keyword_tokens:
-                        self.scanned_program.append(str(Grammar.keyword_tokens[temp][1]))
-                    else:
-
-                        # we need to check that the variable is in a declare
-                        # statement if it is not currently in the identifier dict
-
-                        declare_test = (self.scanned_program[-2] is Grammar.keyword_tokens['declare'][1])
-                        declare_test = declare_test and (self.scanned_program[-1] is Grammar.keyword_tokens['integer'][1])
-
-                        if( temp not in self.identifier_dict and declare_test ):
-                            self.identifier_dict[temp] = self.current_identifier
-                            self.current_identifier += 1
-                        elif( not declare_test ):
-                            raise Exception('Undeclared variable used on line')
-
-                        self.scanned_program.append(str(Grammar.special_tokens['identifier'][1]))
-                        self.scanned_program.append(str(self.identifier_dict[temp]))
-
+                    i = self.scanIdentifierOrKeyword(line, i)
                 elif( char in Grammar.tokens ):
-                    temp = char
-                    token = Grammar.tokens[char]
-
-                    i += 1
-
-                    if type(token) is dict:
-                        try:
-                            char = line[i]
-                            temp += char
-                        except IndexError:
-                            print('Unexpected token at end of line %s' % temp[1:])
-                            sys.exit()
-
-                        if( temp in token ):
-                            token = token[temp]
-                            i += 1
-                        else:
-                            if(temp[:1] in token):
-                                token = token[temp[:1]]
-                            else:
-                                print('Improperly formatted token %s' % temp)
-                                sys.exit()
-
-                    self.scanned_program.append(str(token[1]))
-
+                    i = self.scanToken(line, i)
                 elif( digit_test ):
-
-                    temp = ''
-                    while( digit_test ):
-                        temp += char
-
-                        i += 1
-                        try:
-                            char = line[i]
-                        except IndexError as ie:
-                            break
-
-                        digit_test = char in string.digits
-
-                    self.scanned_program.append(str(Grammar.special_tokens['constant'][1]))
-                    self.scanned_program.append(str(temp))
+                    i = self.scanConstant(line, i)
                 elif( white_space_test ):
+                    # white space is just a delimeter essentially, so we can skip it.
                     i += 1
                 else:
-                    raise Exception('Unrecognizable character \'%s\'' % char)
+                    print('Unrecognizable character \'%s\' on line %i' % (char, line_counter))
+                    sys.exit()
+
+    def scanIdentifierOrKeyword(self, line, i):
+        # this section tests for either a keyword, or a identifier.
+
+        char = line[i]
+
+        lower_test = char in string.ascii_lowercase
+        upper_test = char in string.ascii_uppercase
+        digit_test = char in string.digits
+
+        temp = ''
+
+        while( lower_test or upper_test or digit_test ):
+            temp += char
+
+            i += 1
+
+            try:
+                char = line[i]
+            except IndexError as ie:
+                break
+
+            lower_test = char in string.ascii_lowercase
+            upper_test = char in string.ascii_uppercase
+            digit_test = char in string.digits
+
+        if temp in Grammar.keyword_tokens:
+            self.scanned_program.append(Grammar.keyword_tokens[temp][1])
+        else:
+
+            # we need to check that the variable is in a declare
+            # statement if it is not currently in the identifier dict
+
+            find_declare = (line.find('declare') != -1)
+            find_integer = (line.find('integer') != -1)
+            declare_test = find_declare and find_integer
+
+            if( temp not in self.identifier_dict and declare_test ):
+                self.identifier_dict[temp] = self.current_identifier
+                self.current_identifier += 1
+            elif( temp not in self.identifier_dict and not declare_test ):
+                print('Undeclared variable %s used on line %i' % (temp, self.line_counter))
+                sys.exit()
+
+            self.scanned_program.append(Grammar.special_tokens['identifier'][1])
+            self.scanned_program.append(self.identifier_dict[temp])
+
+        return i
+
+    def scanToken(self, line, i):
+        char = line[i]
+        temp = char
+        token = Grammar.tokens[char]
+
+        i += 1
+
+        if type(token) is dict:
+            try:
+                char = line[i]
+                temp += char
+            except IndexError:
+                print('Unexpected token %s at end of line %i' % (temp[1:], self.line_counter))
+                sys.exit()
+
+            if( temp in token ):
+                token = token[temp]
+                i += 1
+            else:
+                if(temp[:1] in token):
+                    token = token[temp[:1]]
+                else:
+                    print('Improperly formatted token %s on line %i' % (temp, self.line_counter))
+                    sys.exit()
+
+        self.scanned_program.append(token[1])
+
+        return i
+
+    def scanConstant(self, line, i):
+        char = line[i]
+        temp = ''
+
+        digit_test = char in string.digits
+
+        while( digit_test ):
+            temp += char
+
+            i += 1
+            try:
+                char = line[i]
+            except IndexError as ie:
+                break
+
+            digit_test = char in string.digits
+
+        self.scanned_program.append(Grammar.special_tokens['constant'][1])
+        self.scanned_program.append(temp)
+
+        return i
 
 # used for unit testing of the scanner class itself
 if __name__ == "__main__":
     try:
         scanner = Scanner(sys.argv[1])
-        print(' '.join(scanner.scanned_program))
+        print(' '.join(str(code) for code in scanner.scanned_program))
         print(sorted(scanner.identifier_dict.items()))
     except IndexError as ie_e:
         raise ie_e
