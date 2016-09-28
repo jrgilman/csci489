@@ -5,7 +5,6 @@ from grammar import Grammar
 class Scanner:
 
     def __init__(self, file_to_scan):
-        self.program_string = ''
         self.identifier_dict = {}
 
         # we start at 100 at the moment, because no keyword/vocab starts even close

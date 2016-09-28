@@ -48,6 +48,7 @@ class Grammar:
         'constant': ('CONST', 2),
     }
 
+    # deprecated function
     def tokenIterativeDict():
 
         temp_tokens_dict = Grammar.tokens
