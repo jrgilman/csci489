@@ -1,4 +1,4 @@
 declare integer x;
 x := 1;
-writex
+write x
 ##
