@@ -47,3 +47,24 @@ class Grammar:
         'identifier': ('IDR', 1),
         'constant': ('CONST', 2),
     }
+
+    def tokenIterativeDict():
+
+        temp_tokens_dict = Grammar.tokens
+
+        for keyword, tuple_val in Grammar.keyword_tokens.items():
+
+            temp_keyword = ''
+            current_location = temp_tokens_dict
+
+            for char in keyword:
+                temp_keyword += char
+                if temp_keyword in current_location:
+                    current_location = current_location[temp_keyword]
+                else:
+                    current_location[temp_keyword] = {}
+                    current_location = current_location[temp_keyword]
+
+            current_location[temp_keyword] = tuple_val
+
+        return temp_tokens_dict
