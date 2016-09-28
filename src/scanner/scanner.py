@@ -1,6 +1,6 @@
 import sys
 import string
-from grammar import Grammar
+from scanner.grammar import Grammar
 
 class Scanner:
 
@@ -150,7 +150,7 @@ class Scanner:
             digit_test = char in string.digits
 
         self.scanned_program.append(Grammar.special_tokens['constant'][1])
-        self.scanned_program.append(temp)
+        self.scanned_program.append(int(temp))
 
         return i
 
