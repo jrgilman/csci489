@@ -1,0 +1,37 @@
+program = [ decl part, ";" ], st group, "##" ;
+
+decl part = { decl, ";" }, decl ;
+decl = "declare", " ", "integer", " ", identifier list ;
+
+st group = { st, ";" }, st ;
+st = ( asgn | read | write | cond | loop ) ;
+
+identifier list = {identifier, ",", [" "]}, identifier ;
+identifier = letter, [ { (letter | digit) } ] ;
+
+letter = ( "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" |
+           "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" |
+           "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" |
+           "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" |
+           "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" |
+           "Y" | "Z" ) ;
+digit = ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ) ;
+
+asgn = identifier, [" "], ":=", [" "], expr ;
+read = "read", " ", identifier list ;
+write = "write", " ", output list ;
+
+cond = if part, st group, ["else", st group], "fi" ;
+if part = "if", expr, rel, expr, "then" ;
+
+rel = ( "=" | ">" | "<" | "<=" | ">+" | "#" | "in" ) ;
+
+expr = term, { ( "+" | "-" ), term } ;
+term = factor, { ( "*" | "/" ), factor } ;
+factor = [ "-" ], factor2 ;
+factor2 = ( identifier | constant | "(", expr, ")" ) ;
+
+constant = [ "-" ], digit, { digit } ;
+
+loop = loop part, "loop", st group, "endloop" ;
+loop part = ( "to" | "for", identifier, "in" ), expr ;
