@@ -1,12 +1,12 @@
-program = [ decl part, ";" ], st group, "##" ;
+program = [ decl part ], st group, "##" ;
 
-decl part = { decl, ";" }, decl ;
-decl = "declare", " ", "integer", " ", identifier list ;
+decl part = [ { decl, ";" } ], decl, ";" ;
+decl = "declare", "integer", identifier list ;
 
 st group = { st, ";" }, st ;
 st = ( asgn | read | write | cond | loop ) ;
 
-identifier list = {identifier, ",", [" "]}, identifier ;
+identifier list = { identifier, "," }, identifier ;
 identifier = letter, [ { (letter | digit) } ] ;
 
 letter = ( "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" |
@@ -17,9 +17,13 @@ letter = ( "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" |
            "Y" | "Z" ) ;
 digit = ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ) ;
 
-asgn = identifier, [" "], ":=", [" "], expr ;
-read = "read", " ", identifier list ;
-write = "write", " ", output list ;
+asgn = identifier, ":=", expr ;
+read = "read", identifier list ;
+write = "write", output list ;
+
+output list = { (expr | quote), "," }, ( expr | quote ) ;
+quote = "'", word, "'" ;
+word = { (letter | digit) }, ( letter | digit ) ;
 
 cond = if part, st group, ["else", st group], "fi" ;
 if part = "if", expr, rel, expr, "then" ;
@@ -34,4 +38,4 @@ factor2 = ( identifier | constant | "(", expr, ")" ) ;
 constant = [ "-" ], digit, { digit } ;
 
 loop = loop part, "loop", st group, "endloop" ;
-loop part = "to" , " ", expr ;
+loop part = "to", expr ;
