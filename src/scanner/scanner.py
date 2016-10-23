@@ -41,10 +41,11 @@ class Scanner:
                 upper_test = char in string.ascii_uppercase
                 digit_test = char in string.digits
                 white_space_test = (char is ' ')
+                token_test = char in Grammar.tokens
 
                 if( lower_test or upper_test ):
                     i = self.scanIdentifierOrKeyword(line, i)
-                elif( char in Grammar.tokens ):
+                elif( token_test ):
                     i = self.scanToken(line, i)
                 elif( digit_test ):
                     i = self.scanConstant(line, i)
@@ -74,6 +75,8 @@ class Scanner:
             try:
                 char = line[i]
             except IndexError as ie:
+                # occurs if somehow we've attempted to read a chracter that
+                # is past the line's total length
                 break
 
             lower_test = char in string.ascii_lowercase

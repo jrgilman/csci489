@@ -34,4 +34,4 @@ factor2 = ( identifier | constant | "(", expr, ")" ) ;
 constant = [ "-" ], digit, { digit } ;
 
 loop = loop part, "loop", st group, "endloop" ;
-loop part = ( "to" | "for", identifier, "in" ), expr ;
+loop part = ( "to" | "for", " ", identifier, " ", "in" ), " ", expr ;
