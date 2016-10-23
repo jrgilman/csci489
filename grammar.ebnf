@@ -24,7 +24,7 @@ write = "write", " ", output list ;
 cond = if part, st group, ["else", st group], "fi" ;
 if part = "if", expr, rel, expr, "then" ;
 
-rel = ( "=" | ">" | "<" | "<=" | ">+" | "#" | "in" ) ;
+rel = ( "=" | ">" | "<" | "<=" | ">=" | "#" ) ;
 
 expr = term, { ( "+" | "-" ), term } ;
 term = factor, { ( "*" | "/" ), factor } ;
@@ -34,4 +34,4 @@ factor2 = ( identifier | constant | "(", expr, ")" ) ;
 constant = [ "-" ], digit, { digit } ;
 
 loop = loop part, "loop", st group, "endloop" ;
-loop part = ( "to" | "for", " ", identifier, " ", "in" ), " ", expr ;
+loop part = "to" , " ", expr ;
