@@ -2,6 +2,7 @@ from scanner.scanner import Scanner
 from scanner.grammar import Grammar
 
 import sys
+import string
 
 class Parser:
 
@@ -122,11 +123,32 @@ class Parser:
     def output_list(self):
         # the documentation says to support quotes, but I won't be doing that yet
         # as it requires a thoughtful addition to the scanner and grammar.
-        self.expression()
+        if self.current_code[1] == Grammar.special_tokens['quote'][1]:
+            self.quote()
+        else:
+            self.expression()
 
         while self.current_code[1] == Grammar.tokens[','][1]:
             self.nextCode()
-            self.expression()
+            if self.current_code[1] == Grammar.special_tokens['quote'][1]:
+                self.quote()
+            else:
+                self.expression()
+
+    def quote(self):
+        assert self.current_code[1] == Grammar.special_tokens['quote'][1]
+        self.nextCode()
+
+        word = self.current_code[1]
+        for char in word:
+            lower_test = char in string.ascii_lowercase
+            upper_test = char in string.ascii_uppercase
+            digit_test = char in string.digits
+            if not (lower_test or upper_test or digit_test):
+                print('Your string has an invalid character: %s' % char)
+                sys.exit()
+
+        self.nextCode()
 
     def expression(self):
         self.term()

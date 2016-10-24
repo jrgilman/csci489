@@ -16,7 +16,7 @@ else
     write 10
 fi;
 
-write x, z
+write x, z, 'hello'
 
 
 ##

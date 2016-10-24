@@ -47,4 +47,5 @@ class Grammar:
     special_tokens = {
         'identifier': ('IDR', 1),
         'constant': ('CONST', 2),
+        'quote': ('QUOTE', 31)
     }

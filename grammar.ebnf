@@ -22,8 +22,7 @@ read = "read", identifier list ;
 write = "write", output list ;
 
 output list = { (expr | quote), "," }, ( expr | quote ) ;
-quote = "'", word, "'" ;
-word = { (letter | digit) }, ( letter | digit ) ;
+quote = "'", { (letter | digit) }, ( letter | digit ), "'" ;
 
 cond = "if", expr, rel, expr, "then", st group, ["else", st group], "fi" ;
 

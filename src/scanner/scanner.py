@@ -42,6 +42,7 @@ class Scanner:
                 digit_test = char in string.digits
                 white_space_test = (char is ' ')
                 token_test = char in Grammar.tokens
+                quote_test = (char is '\'')
 
                 if( lower_test or upper_test ):
                     i = self.scanIdentifierOrKeyword(line, i)
@@ -49,6 +50,8 @@ class Scanner:
                     i = self.scanToken(line, i)
                 elif( digit_test ):
                     i = self.scanConstant(line, i)
+                elif( quote_test ):
+                    i = self.scanQuote(line, i)
                 elif( white_space_test ):
                     # white space is just a delimeter essentially, so we can skip it.
                     i += 1
@@ -154,6 +157,31 @@ class Scanner:
 
         self.scanned_program.append(Grammar.special_tokens['constant'][1])
         self.scanned_program.append(int(temp))
+
+        return i
+
+    def scanQuote(self, line, i):
+
+        #skip the first quote
+        i += 1
+        char = line[i]
+        quote_test = (char is '\'')
+
+        temp = ''
+
+        while( not quote_test ):
+            try:
+                char = line[i]
+                quote_test = (char is '\'')
+                if not quote_test:
+                    temp += char
+                i += 1
+            except IndexError as ie:
+                print('No end quote found.')
+                sys.exit()
+
+        self.scanned_program.append(Grammar.special_tokens['quote'][1])
+        self.scanned_program.append(temp)
 
         return i
 
