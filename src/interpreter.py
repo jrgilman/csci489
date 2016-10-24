@@ -14,4 +14,6 @@ if __name__ == "__main__":
         sys.exit()
 
     scanned_program = Scanner(source_code_path)
+    print('Program Scanned.')
     parser = Parser(scanned_program)
+    print('Program Parsed.')

@@ -25,8 +25,7 @@ output list = { (expr | quote), "," }, ( expr | quote ) ;
 quote = "'", word, "'" ;
 word = { (letter | digit) }, ( letter | digit ) ;
 
-cond = if part, st group, ["else", st group], "fi" ;
-if part = "if", expr, rel, expr, "then" ;
+cond = "if", expr, rel, expr, "then", st group, ["else", st group], "fi" ;
 
 rel = ( "=" | ">" | "<" | "<=" | ">=" | "#" ) ;
 
@@ -37,5 +36,4 @@ factor2 = ( identifier | constant | "(", expr, ")" ) ;
 
 constant = [ "-" ], digit, { digit } ;
 
-loop = loop part, "loop", st group, "endloop" ;
-loop part = "to", expr ;
+loop = "to", expr, "loop", st group, "endloop" ;
