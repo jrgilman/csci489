@@ -1,6 +1,12 @@
 # Lake Forest College CSCI 489 Mini Lang Interpreter
 
-## Completed Phases: `1` `2`
+## Completed phases: `1` `2`
+
+## How to execute:
+
+### Simplest way to execute the program is by running python3 in the top level directory of the project: `python3 ./src/interpreter.py file_name`
+
+## Parts of the program:
 
 ### Interpreter `src/interpreter.py`
 
