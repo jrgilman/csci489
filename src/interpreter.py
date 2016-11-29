@@ -17,3 +17,5 @@ if __name__ == "__main__":
     print('Program Scanned.')
     parser = Parser(scanned_program)
     print('Program Parsed.')
+    print(parser.postfix_list)
+    print(scanned_program.identifier_dict)

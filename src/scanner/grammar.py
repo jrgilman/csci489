@@ -25,8 +25,8 @@ class Grammar:
         },
         '+': ('PLUS', 15),
         '-': ('MINUS', 16),
-        '*': ('STAR', 17),
-        '/': ('DVD', 18),
+        '*': ('MUL', 17),
+        '/': ('DIV', 18),
         '=': ('EQR', 19),
         '>': {
             '>': ('GTR', 20),
@@ -48,4 +48,10 @@ class Grammar:
         'identifier': ('IDR', 1),
         'constant': ('CONST', 2),
         'quote': ('QUOTE', 31)
+    }
+
+    parser_tokens = {
+        'UM': ('UNARYMINUS', 32),
+        'BR': ('BRANCH', 33),
+        'BF': ('BRFALSE', 34)
     }
