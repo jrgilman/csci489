@@ -291,6 +291,7 @@ class Parser:
         self.postfix_list.append(Grammar.tokens['<']['<'][1])
 
         # now we insert our branch on false code
+        self.postfix_list.append(Grammar.special_tokens['constant'][1])
         self.postfix_list.append('?')
         false_loc_replace = len(self.postfix_list) - 1
         self.postfix_list.append(Grammar.parser_tokens['BF'][1])
