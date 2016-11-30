@@ -43,6 +43,7 @@ class Parser:
         self.statement_group()
 
         assert self.current_code[1] == Grammar.tokens['#']['##'][1]
+        self.postfix_list.append(Grammar.tokens['#']['##'][1])
 
     def declare_part(self):
 
@@ -282,6 +283,7 @@ class Parser:
         # since our loops only count up, that means we just need to make sure that
         # the variable is less than the expression.
         self.postfix_list.append(Grammar.special_tokens['identifier'][1])
+        jump_back_loc = len(self.postfix_list) - 1
         self.postfix_list.append(self.scanned_program.identifier_dict[hidden_loop_var])
 
         self.expression()
@@ -298,7 +300,28 @@ class Parser:
 
         self.statement_group()
 
+        # this code manages incrementing the variable by manually creating postfix
+        self.postfix_list.append(Grammar.special_tokens['identifier'][1])
+        self.postfix_list.append(self.scanned_program.identifier_dict[hidden_loop_var])
+
+        self.postfix_list.append(Grammar.special_tokens['identifier'][1])
+        self.postfix_list.append(self.scanned_program.identifier_dict[hidden_loop_var])
+
+        self.postfix_list.append(Grammar.special_tokens['constant'][1])
+        self.postfix_list.append(1)
+
+        self.postfix_list.append(Grammar.tokens['+'][1])
+
+        self.postfix_list.append(Grammar.tokens[':'][':='][1])
+        # end of manual increment
+
+        # we then jump back to the part of the code where we read in the loop
+        # variable and start the process over gain
+        self.postfix_list.append(jump_back_loc)
+        self.postfix_list.append(Grammar.parser_tokens['BR'][1])
+
         # and now we replace the ? placeholder from earlier with our final branch location
+        # so that we skip the looping branch above
         self.postfix_list[false_loc_replace] = len(self.postfix_list)
 
         assert self.current_code[1] == Grammar.keyword_tokens['endloop'][1]
@@ -331,6 +354,7 @@ class Parser:
         self.postfix_list.append(Grammar.special_tokens['constant'][1])
         self.postfix_list.append('?')
         end_loc_replace = len(self.postfix_list) - 1
+        self.postfix_list.append(Grammar.parser_tokens['BR'][1])
 
         # it will jump to one after the ?
         false_jump_loc = len(self.postfix_list)
