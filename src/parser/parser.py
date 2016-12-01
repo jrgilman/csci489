@@ -318,6 +318,7 @@ class Parser:
 
         # we then jump back to the part of the code where we read in the loop
         # variable and start the process over gain
+        self.postfix_list.append(Grammar.special_tokens['constant'][1])
         self.postfix_list.append(jump_back_loc)
         self.postfix_list.append(Grammar.parser_tokens['BR'][1])
 
