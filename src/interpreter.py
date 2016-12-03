@@ -1,7 +1,15 @@
 from scanner.scanner import Scanner
+from scanner.grammar import Grammar
+
 from parser.parser import Parser
 
 import sys
+
+def merge_dicts(*dict_args):
+    result = {}
+    for dictionary in dict_args:
+        result.update(dictionary)
+    return result
 
 if __name__ == "__main__":
 
@@ -18,4 +26,10 @@ if __name__ == "__main__":
     parser = Parser(scanned_program)
     print('Program Parsed.')
     print(parser.postfix_list)
-    print(scanned_program.identifier_dict)
+
+    interpreter_dict = merge_dicts(
+        dict((v,k) for k,v in scanned_program.identifier_dict.items()),
+        Grammar.flattenToValueKeyed()
+    )
+
+    print(interpreter_dict)
