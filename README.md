@@ -1,10 +1,11 @@
 # Lake Forest College CSCI 489 Mini Lang Interpreter
 
-## Completed phases: `1` `2`
+## Completed phases: `1` `2` `3` `4` `FINISHED`
 
 ## How to execute:
 
-### Simplest way to execute the program is by running python3 in the top level directory of the project: `python3 ./src/interpreter.py file_name`
+### Simplest way to execute the program is by running it in the top level directory of the project, it will automatically look for python3 if you have it installed:
+`src/interpreter.py file_name`
 
 ## Parts of the program:
 
@@ -17,15 +18,11 @@
 
 ##### Purpose: Parser the code stream output from the scanner and confirms that it complies with the grammar laid out for the language (can be found in grammar.ebnf or grammar.bnf). Additionally will eventually write the byte stream into reverse polish which will be executable.
 ----
-Currently there is no way to unit test the parser on its own. Getting a code stream is technically possible by running the scanner and the the parser, but ultimately useless since running the interpreter program ultimately achieves the exact same thing with less CLI monkeying.
 
 ### Scanner `src/scanner/scanner.py`
 
 ##### Purpose: Scans the 489 lang source code into a code stream based on the `src/scanner/grammar.py` file. Very few errors are thrown at this stage since the scanner is 'dumb' per-se. It simply maps valid tokens to codes, recognizes when a variable is being declared, and recognizes constants.
 ----
-To run/test just the scanner, do:
-
-`python3 ./src/scanner/scanner.py file_name`
 
 * NOTE: file_name is relative to your current working directory, and the above
 snippet assumes that you are currently in the csci489 folder. You can run programs out side of this folder by providing their absolute or relative path.
