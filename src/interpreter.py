@@ -45,7 +45,7 @@ if __name__ == "__main__":
             while (len(program_stack) > 0 and  (tok != Grammar.special_tokens['constant'][1] or tok != Grammar.special_tokens['identifier'][1])):
                 var = program_stack[-1]
                 var = (interpreter_dict.get([var][0]))
-                varValue = int(input("Please Enter a Value for %s: " % (var)))
+                varValue = int(input("Please enter a value for %s: " % (var)))
                 var = program_stack.pop()
                 tok = program_stack.pop()
                 program_temp_values[var] = varValue
