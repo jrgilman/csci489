@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from scanner.scanner import Scanner
 from scanner.grammar import Grammar
 from parser.parser import Parser
@@ -21,17 +23,12 @@ if __name__ == "__main__":
         sys.exit()
 
     scanned_program = Scanner(source_code_path)
-    print('Program Scanned.')
     parser = Parser(scanned_program)
-    print('Program Parsed.')
-    print(parser.postfix_list)
 
     interpreter_dict = merge_dicts(
         dict((v,k) for k,v in scanned_program.identifier_dict.items()),
         Grammar.flattenToValueKeyed()
     )
-
-    print(interpreter_dict)
 
     program_stack = []
     program_temp_values = {}
@@ -65,7 +62,12 @@ if __name__ == "__main__":
 
                 printList.reverse()
                 for val in printList:
-                    print(val)
+                    encoded = str(val).encode('UTF-8')
+                    if "\\n" in u"%s" % encoded:
+                        print("")
+                    else:
+                        print(val, end="")
+
 
         elif parser.postfix_list[postfix_list_count]  == Grammar.tokens[':'][':='][1]:
             asgnVal = program_stack.pop()

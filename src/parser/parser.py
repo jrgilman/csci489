@@ -176,7 +176,8 @@ class Parser:
             lower_test = char in string.ascii_lowercase
             upper_test = char in string.ascii_uppercase
             digit_test = char in string.digits
-            if not (lower_test or upper_test or digit_test):
+            slash_test = char is '\\'
+            if not (lower_test or upper_test or digit_test or slash_test):
                 print('Your string has an invalid character: %s' % char)
                 sys.exit()
 
