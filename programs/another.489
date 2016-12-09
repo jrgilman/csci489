@@ -5,7 +5,6 @@ b := 125;
 c := b - 50;
 d := b + c + 100;
 
-read a;
-write a
+write d
 
 ##

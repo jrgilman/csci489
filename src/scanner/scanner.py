@@ -56,7 +56,7 @@ class Scanner:
                     # white space is just a delimeter essentially, so we can skip it.
                     i += 1
                 else:
-                    print('Unrecognizable character \'%s\' on line %i' % (char, line_counter))
+                    print('Unrecognizable character \'%s\' on line %i' % (char, self.line_counter))
                     sys.exit()
 
     def scanIdentifierOrKeyword(self, line, i):

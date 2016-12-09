@@ -2,6 +2,8 @@
 
 ## Completed phases: `1` `2` `3` `4` `FINISHED`
 
+### This program is able to execute all requirements put forth for the mini-lang. All grammars provided have been implemented.
+
 ## How to execute:
 
 ### Simplest way to execute the program is by running it in the top level directory of the project, it will automatically look for python3 if you have it installed:
@@ -11,7 +13,7 @@
 
 ### Interpreter `src/interpreter.py`
 
-##### Purpose: Ties all parts of the mini-lang execution process into a single program which you can run to handle the source code from scanning to execution.
+##### Purpose: Ties all parts of the mini-lang execution process into a single program which you can run to handle the source code. It will call the scanner, and then parse the scanned program to the parser which will then return a postfix list. This postfix list is then executed by the interpreter (this file).
 ---
 
 ### Parser `src/parser/parser.py`
@@ -29,4 +31,12 @@ snippet assumes that you are currently in the csci489 folder. You can run progra
 
 * NOTE 2: Grammar and vocabulary can be found in src/scanner/grammar.py, this is useful to figure out what the output of a program means.
 
-* NOTE 3: Some test program files have been provided at the top level directory
+* NOTE 3: The two sample programs showing off the language's features have been provided in the programs folder and can be executed with the commands:
+
+* NOTE 4: The language's BNF and Extended BNF grammar sheets can be found within the grammar folder.
+
+`src/interpreter.py programs/fibonacci.489`
+
+AND
+
+`src/interpreter.py programs/collatz.489`

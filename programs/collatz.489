@@ -1,0 +1,48 @@
+declare integer currnumber;
+declare integer counter;
+
+declare integer x;
+declare integer eventester, eventesternumber;
+
+declare integer runs;
+runs := 99;
+counter := 1;
+
+to runs loop
+
+  counter := counter + 1;
+  currnumber := counter;
+  x := 1;
+
+  write '\n', currnumber, '\n';
+
+  to x loop
+
+    eventester := currnumber / 2;
+    eventesternumber := currnumber;
+
+    to eventester loop
+      eventesternumber := eventesternumber - 2;
+    endloop;
+
+    if eventesternumber = 0 then
+      currnumber := currnumber / 2;
+    else
+      currnumber := 3*currnumber + 1;
+    fi;
+
+    if currnumber # 1 then
+      x := x + 1;
+    fi;
+
+    write currnumber, 'x'
+
+  endloop;
+
+  write '\n'
+
+endloop;
+
+write '\n'
+
+##

@@ -35,6 +35,7 @@ if __name__ == "__main__":
     postfix_list_count = 0
 
     while(postfix_list_count < len(parser.postfix_list)):
+
         if parser.postfix_list[postfix_list_count] == Grammar.special_tokens['identifier'][1] or parser.postfix_list[postfix_list_count] == Grammar.special_tokens['constant'][1] or parser.postfix_list[postfix_list_count] == Grammar.special_tokens['quote'][1]:
             program_stack.append(parser.postfix_list[postfix_list_count])
             postfix_list_count+=1
@@ -53,7 +54,7 @@ if __name__ == "__main__":
         elif parser.postfix_list[postfix_list_count] == Grammar.keyword_tokens['write'][1]:
                 tok = program_stack[-2]
                 printList = []
-                while (len(program_stack) > 0 and (tok != Grammar.special_tokens['constant'][1] or tok != Grammar.special_tokens['identifier'][1] or tok!= Grammar.special_tokens['quote'][1])):
+                while (len(program_stack) > 0 and (tok != Grammar.special_tokens['constant'][1] or tok != Grammar.special_tokens['identifier'][1] or tok != Grammar.special_tokens['quote'][1])):
                     val = program_stack.pop()
                     tok = program_stack.pop()
                     if(tok == Grammar.special_tokens['identifier'][1]):
@@ -64,16 +65,22 @@ if __name__ == "__main__":
                 for val in printList:
                     encoded = str(val).encode('UTF-8')
                     if "\\n" in u"%s" % encoded:
-                        print("")
+                        sys.stdout.write("\n")
                     else:
-                        print(val, end="")
-
+                        sys.stdout.write(str(val))
+                    sys.stdout.flush()
 
         elif parser.postfix_list[postfix_list_count]  == Grammar.tokens[':'][':='][1]:
             asgnVal = program_stack.pop()
-            assert(program_stack.pop() == Grammar.special_tokens['identifier'][1] or Grammar.special_tokens['constant'][1])
+            asgnType = program_stack.pop()
+
             asgnVar = program_stack.pop()
-            program_temp_values[asgnVar] = asgnVal
+
+            if asgnType == Grammar.special_tokens['identifier'][1]:
+                program_temp_values[asgnVar] = program_temp_values[asgnVal]
+            else:
+                program_temp_values[asgnVar] = asgnVal
+
             assert(program_stack.pop() == Grammar.special_tokens['identifier'][1] or Grammar.special_tokens['constant'][1])
 
         elif parser.postfix_list[postfix_list_count]  == Grammar.tokens['+'][1]:
@@ -138,7 +145,7 @@ if __name__ == "__main__":
                 val2 = program_temp_values.get(val2)
 
             program_stack.append(Grammar.special_tokens['constant'][1])
-            program_stack.append(val2 / val1)
+            program_stack.append(int(val2 / val1))
 
         elif parser.postfix_list[postfix_list_count] == Grammar.tokens['='][1]:
             var1 = program_stack.pop()

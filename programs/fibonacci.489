@@ -1,0 +1,19 @@
+declare integer a, b, n;
+declare integer temp;
+
+read n;
+
+a := 1;
+b := 1;
+
+to n loop
+
+  write a, '\n';
+
+  temp := a;
+  a := b;
+  b := temp + b
+
+endloop
+
+##
